@@ -1,6 +1,6 @@
 import random
 import re
-from typing import Optional, List, Tuple, Union
+from typing import Optional, List, Tuple
 from hangman_picture import hangman_picture
 
 
