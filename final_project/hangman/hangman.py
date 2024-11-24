@@ -40,7 +40,8 @@ class Hangman:
         """Получает желаемую длину слова от пользователя.
 
         Returns:
-            Optional[int]: Длина слова или None, если пользователь завершил игру.
+            Optional[int]: Длина слова или None, если пользователь завершил
+            игру.
         """
         while True:
             try:
@@ -55,7 +56,9 @@ class Hangman:
                 if wanted_length in self.possible_lengths:
                     return wanted_length
                 print(
-                    f'Недопустимая длина. Возможные варианты: {", ".join(map(str, self.possible_lengths))}'
+                    f'Недопустимая длина. Возможные варианты: {
+                    ", ".join(map(str, self.possible_lengths))
+                    }'
                 )
             except ValueError:
                 print("Некорректный ввод. Введите число.")
@@ -64,7 +67,8 @@ class Hangman:
         """Выбирает слово указанной длины.
 
         Returns:
-            Optional[str]: Слово для игры или None, если пользователь завершил игру.
+            Optional[str]: Слово для игры или None, если пользователь
+            завершил игру.
         """
         wanted_length = self._get_wanted_length()
         if wanted_length is None:
@@ -87,7 +91,8 @@ class Hangman:
         """Предлагает выбрать слово другой длины.
 
         Returns:
-            Optional[str]: Слово для игры или None, если пользователь завершил игру.
+            Optional[str]: Слово для игры или None, если пользователь
+            завершил игру.
         """
         choice = input(
             "Вы хотите попробовать отгадать слово другой " "длины? (да\нет) \n"
@@ -124,17 +129,20 @@ class Hangman:
 
             if guess_letter == "выход":
                 secret = input(
-                    'Хотите увидеть слово полностью? (да\нет)\n').lower()
-                if secret == 'да':
-                    print(f'\nЗагаданное слово: {word_for_game}')
+                    "Хотите увидеть слово полностью? (да\нет)\n"
+                ).lower()
+                if secret == "да":
+                    print(f"\nЗагаданное слово: {word_for_game}")
                     print("Выход из игры.")
                     return
-                elif secret == 'нет':
+                elif secret == "нет":
                     print("Выход из игры.")
                     return
                 else:
                     continue
-            if len(guess_letter) != 1 or not re.match("^[а-я]$", guess_letter):
+            if len(guess_letter) != 1 or not re.match(
+                    "^[а-я]$", guess_letter
+            ):
                 print("Введите одну русскую букву.")
                 continue
             if guess_letter in used_letters:
