@@ -1,21 +1,47 @@
 import random
 import re
+from typing import Optional, List, Tuple, Union
 from hangman_picture import hangman_picture
 
 
 class Hangman:
-    def __init__(self, file_with_words):
-        self.words = self._load_words(file_with_words)
-        self.possible_lengths = sorted(set(len(word) for word in self.words))
-        self.max_length = len(max(self.words, key=len))
-        self.min_length = len(min(self.words, key=len))
-        self.used_words = []
+    """Класс для игры 'Виселица'.
 
-    def _load_words(self, file_with_words):
+    Игра заключается в угадывании слова, предоставленного программой.
+    """
+
+    def __init__(self, file_with_words: str) -> None:
+        """Инициализация игры.
+
+        Args:
+            file_with_words (str): Путь к файлу, содержащему слова для игры.
+        """
+        self.words: Tuple[str, ...] = self._load_words(file_with_words)
+        self.possible_lengths: List[int] = sorted(
+            set(len(word) for word in self.words)
+        )
+        self.max_length: int = max(self.possible_lengths)
+        self.min_length: int = min(self.possible_lengths)
+        self.used_words: List[str] = []
+
+    def _load_words(self, file_with_words: str) -> Tuple[str, ...]:
+        """Загружает слова из файла.
+
+        Args:
+            file_with_words (str): Путь к файлу с словами.
+
+        Returns:
+            Tuple[str, ...]: Кортеж слов из файла.
+        """
         with open(file_with_words, "r", encoding="utf-8") as file:
             return tuple(map(str, file.read().split()))
 
-    def _get_wanted_length(self):
+    def _get_wanted_length(self) -> Optional[int]:
+        """Получает желаемую длину слова от пользователя.
+
+        Returns:
+            Optional[int]: Длина слова или None, если пользователь завершил игру.
+        """
         while True:
             try:
                 wanted_length = int(
@@ -34,7 +60,12 @@ class Hangman:
             except ValueError:
                 print("Некорректный ввод. Введите число.")
 
-    def _choose_word(self):
+    def _choose_word(self) -> Optional[str]:
+        """Выбирает слово указанной длины.
+
+        Returns:
+            Optional[str]: Слово для игры или None, если пользователь завершил игру.
+        """
         wanted_length = self._get_wanted_length()
         if wanted_length is None:
             return None
@@ -52,7 +83,12 @@ class Hangman:
         print("\nНовых слов такой длины больше нет, все отгаданы!\n")
         return self._prompt_new_length()
 
-    def _prompt_new_length(self):
+    def _prompt_new_length(self) -> Optional[str]:
+        """Предлагает выбрать слово другой длины.
+
+        Returns:
+            Optional[str]: Слово для игры или None, если пользователь завершил игру.
+        """
         choice = input(
             "Вы хотите попробовать отгадать слово другой " "длины? (да\нет) \n"
         )
@@ -60,7 +96,8 @@ class Hangman:
             choice = input('Введите "да" или "нет") \n')
         return self._choose_word() if choice == "да" else None
 
-    def _guess_word(self):
+    def _guess_word(self) -> None:
+        """Основная логика игры."""
         word_for_game = self._choose_word()
         if not word_for_game:
             print("Спасибо за игру!")
@@ -129,7 +166,8 @@ class Hangman:
                 print(f"Вы отгадали слово! Вот оно: {''.join(hidden_word)}\n")
                 self._continue_game()
 
-    def _continue_game(self):
+    def _continue_game(self) -> None:
+        """Предлагает продолжить игру."""
         answer = input("\nХотите сыграть еще раз?")
         while answer not in ("да", "нет"):
             answer = input("Введите да или нет: ").lower()
@@ -139,7 +177,8 @@ class Hangman:
             print("\nСпасибо за игру!")
             print(f"Отгаданные слова: {', '.join(self.used_words)}\n")
 
-    def play_game(self):
+    def play_game(self) -> None:
+        """Запускает игру."""
         self._guess_word()
 
 
